@@ -33,10 +33,12 @@ Run:
 
 ```bash
 pkg update && pkg upgrade -y
+```
 # 🔐 3. Enable Storage Access
 Run:
-
+```bash
 termux-setup-storage
+```
 Expected behavior:
 Android permission popup appears
 
@@ -47,8 +49,9 @@ After completion, Termux creates:
 ~/storage/
 # 📂 4. Verify Storage Access
 Run:
-
+```bash
 ls ~/storage
+```
 Expected output:
 
 dcim
@@ -65,14 +68,17 @@ Termux Path	Android Path
 ~/storage/shared	/storage/emulated/0
 # 📸 6. Access Camera Photos
 Check:
-
+```bash
 ls ~/storage/dcim
+```
 or directly:
-
+```bash
 ls /sdcard/DCIM/Camera
+```
 or:
-
+```bash
 ls /storage/emulated/0/DCIM/Camera
+```
 ⚠️ Note on Camera Folder
 The Camera subfolder may not always appear in Termux
 
@@ -95,30 +101,35 @@ Enable if available.
 7.2 Disable battery optimization
 Settings → Apps → Termux → Battery → Unrestricted
 7.3 Reset storage setup
+```bash
 rm -rf ~/storage
 termux-setup-storage
+```
 # 📦 8. Install Required Tools
 For scripting and NAS sync:
-
+```bash
 pkg install rclone -y
 pkg install rsync -y
 pkg install openssh -y
 pkg install coreutils -y
 pkg install termux-api -y
-
+```
 Run:
+```bash
 sshd 
+```
 
+[!TIP]
 Runs SSH so script can be uploaded to mobile using Powershell script (deploy_termux.ps1)
 
 To run the ps1 script is it requried to give Powershell permission to execute scripts. 
 Run: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
-
 # 🌐 9. Configure Rclone for NAS
 Run:
-
+```bash
 rclone config
+```
 Setup example:
 Create new remote
 
@@ -153,15 +164,17 @@ Rclone mapping typically becomes:
 truenas:uploads
 # ▶️ 12. Running Scripts in Termux
 Make script executable: (not required, deploy_termux.ps1 script will set the permissions automatically)
-
+```bash
 chmod +x script.sh
+```
 Run:
-
+```bash
 ./script.sh  <WIFI_SUBSTRING>
+```
 Debug mode:
-
+```bash
 bash -x script.sh
-
+```
 - WIFI_SUBSTRING is an optional parameter. Files will only be synced if the WIFI SSID connected to contains this substring.
 # ⚠️ 13. Common Mistakes
 ❌ Running scripts by tapping them in file manager
