@@ -33,7 +33,7 @@ Run:
 
 ```bash
 pkg update && pkg upgrade -y
-🔐 3. Enable Storage Access
+# 🔐 3. Enable Storage Access
 Run:
 
 termux-setup-storage
@@ -45,7 +45,7 @@ Grant access to files/media
 After completion, Termux creates:
 
 ~/storage/
-📂 4. Verify Storage Access
+# 📂 4. Verify Storage Access
 Run:
 
 ls ~/storage
@@ -56,14 +56,14 @@ downloads
 shared
 documents
 
-🧠 5. Understanding Storage Mapping
+# 🧠 5. Understanding Storage Mapping
 Termux creates symbolic links to Android storage:
 
 Termux Path	Android Path
 ~/storage/dcim	/storage/emulated/0/DCIM
 ~/storage/downloads	/storage/emulated/0/Download
 ~/storage/shared	/storage/emulated/0
-📸 6. Access Camera Photos
+# 📸 6. Access Camera Photos
 Check:
 
 ls ~/storage/dcim
@@ -80,7 +80,7 @@ Some devices store images directly inside DCIM
 
 Windows (MTP) may still show DCIM\Camera
 
-🔍 7. Troubleshooting Storage Access
+# 🔍 7. Troubleshooting Storage Access
 If termux-setup-storage fails or crashes:
 
 7.1 Check Android permissions manually
@@ -97,7 +97,7 @@ Settings → Apps → Termux → Battery → Unrestricted
 7.3 Reset storage setup
 rm -rf ~/storage
 termux-setup-storage
-📦 8. Install Required Tools
+# 📦 8. Install Required Tools
 For scripting and NAS sync:
 
 pkg install rclone -y
@@ -115,7 +115,7 @@ To run the ps1 script is it requried to give Powershell permission to execute sc
 Run: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
 
-🌐 9. Configure Rclone for NAS
+# 🌐 9. Configure Rclone for NAS
 Run:
 
 rclone config
@@ -140,28 +140,30 @@ Username/password: NAS credentials
 
 Path: uploads (if applicable)
 
-🧪 10. Test NAS Connectivity
+# 🧪 10. Test NAS Connectivity
 rclone lsd truenas:
 If successful, you will see directories from your NAS.
 
-📁 11. Example NAS Target Path
+# 📁 11. Example NAS Target Path
 For a NAS path like:
 
 \\192.168.1.13\Photos\uploads
 Rclone mapping typically becomes:
 
 truenas:uploads
-▶️ 12. Running Scripts in Termux
+# ▶️ 12. Running Scripts in Termux
 Make script executable: (not required, deploy_termux.ps1 script will set the permissions automatically)
 
 chmod +x script.sh
 Run:
 
-./script.sh
+./script.sh  <WIFI_SUBSTRING>
 Debug mode:
 
 bash -x script.sh
-⚠️ 13. Common Mistakes
+
+- WIFI_SUBSTRING is an optional parameter. Files will only be synced if the WIFI SSID connected to contains this substring.
+# ⚠️ 13. Common Mistakes
 ❌ Running scripts by tapping them in file manager
 
 ❌ Editing scripts with Windows line endings (CRLF)
@@ -175,7 +177,7 @@ If edited on Windows:
 
 pkg install dos2unix
 dos2unix script.sh
-🔁 14. Auto Execution / Daemon Options
+# 🔁 14. Auto Execution / Daemon Options
 You can run scripts periodically using:
 
 Loop-based daemon:
@@ -188,7 +190,7 @@ termux-job-scheduler
 
 cron (via termux-services)
 
-📍 15. Recommended Photo Source Path
+# 📍 15. Recommended Photo Source Path
 Use one of:
 
 /sdcard/DCIM/Camera
@@ -198,7 +200,7 @@ or:
 Fallback:
 
 /sdcard/DCIM
-🔒 16. Safety Notes
+# 🔒 16. Safety Notes
 rm -rf ~/storage:
 
 ❌ Does NOT delete your photos
@@ -207,6 +209,6 @@ rm -rf ~/storage:
 
 Always double-check paths before using rm
 
-🧪 17. Useful Debug Commands
+# 🧪 17. Useful Debug Commands
 ls /sdcard/DCIM
 find /sdcard/DCIM -type f -iname "*.jpg"
