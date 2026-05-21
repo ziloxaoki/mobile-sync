@@ -3,8 +3,11 @@ set -euo pipefail
 
 # ---------------- CONFIG ----------------
 WIFI_SUBSTRING="${1:-KAC}"
-SOURCE_DIR="$HOME/storage/dcim/Camera"
-SYNCED_DIR="$HOME/storage/dcim/Synced"
+SOURCE_DIRS=(
+    "$HOME/storage/DCIM/Camera"
+    "$HOME/storage/DCIM/DJI Album"
+)
+SYNCED_DIR="$HOME/storage/DCIM/Synced"
 RCLONE_REMOTE="truenas:uploads"
 LOG_FILE="$HOME/photo_sync.log"
 DEVICE_ID=$(getprop ro.product.model | tr ' ' '_')
@@ -39,13 +42,25 @@ log "Wi-Fi matches. Starting sync..."
 # ----------- PREPARE DIRECTORIES --------
 mkdir -p "$SYNCED_DIR"
 
-if [ ! -d "$SOURCE_DIR" ]; then
-    log "Source directory not found: $SOURCE_DIR"
+VALID_SOURCE=false
+
+for DIR in "${SOURCE_DIRS[@]}"; do
+    if [ -d "$DIR" ]; then
+        VALID_SOURCE=true
+        log "Source directory found: $DIR"
+    else
+        log "Source directory not found: $DIR"
+    fi
+done
+
+if [ "$VALID_SOURCE" = false ]; then
+    log "No valid source directories found."
     exit 1
 fi
 
 # ----------- DEBUG COUNT ----------------
-FILE_COUNT=$(find "$SOURCE_DIR" -type f \( \
+FILE_COUNT=$(
+find "${SOURCE_DIRS[@]}" -type f \( \
 -iname "*.jpg" -o \
 -iname "*.jpeg" -o \
 -iname "*.png" -o \
@@ -54,7 +69,8 @@ FILE_COUNT=$(find "$SOURCE_DIR" -type f \( \
 -iname "*.mov" -o \
 -iname "*.avi" -o \
 -iname "*.mkv" \
-\) | wc -l)
+\) 2>/dev/null | wc -l
+)
 
 log "Files found: $FILE_COUNT"
 
@@ -87,7 +103,7 @@ while IFS= read -r file; do
     mv "$file" "$SYNCED_DIR/$(date +%s)_$BASENAME"
     log "Moved to Synced: $BASENAME"
 
-done < <(find "$SOURCE_DIR" -type f \( \
+done < <(find "${SOURCE_DIRS[@]}" -type f \( \
 -iname "*.jpg" -o \
 -iname "*.jpeg" -o \
 -iname "*.png" -o \
@@ -96,6 +112,6 @@ done < <(find "$SOURCE_DIR" -type f \( \
 -iname "*.mov" -o \
 -iname "*.avi" -o \
 -iname "*.mkv" \
-\))
+\) 2>/dev/null)
 
 log "Sync cycle completed."

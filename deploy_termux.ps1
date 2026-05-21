@@ -1,7 +1,4 @@
 # ---------------- CONFIG ----------------
-# $PHONE_IP = "192.168.1.105"
-
-$USERNAME = "u0_a235"
 $PORT = 8022
 
 # Use CURRENT directory where script is executed
@@ -23,6 +20,13 @@ $PHONE_IP = [Microsoft.VisualBasic.Interaction]::InputBox(
     "Enter your phone IP address:",
     "Termux Deployment",
     "192.168.1.106"
+)
+
+# Prompt user for admin id
+$USERNAME = [Microsoft.VisualBasic.Interaction]::InputBox(
+    "Enter your Termux user id:",
+    "Termux Deployment",
+    "u0_a235"
 )
 
 # Validate input
